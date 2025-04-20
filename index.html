@@ -1,73 +1,117 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>DecoBot - Interior Design Assistant</title>
+  <title>DecoBot – Interior Design Assistant</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background-color: #fefefe; }
-    #chatBox { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; margin-bottom: 10px; }
-    #chatInput { width: 100%; padding: 10px; font-size: 16px; }
-    .bot { color: #444; margin: 5px 0; }
-    .user { text-align: right; color: #0077cc; margin: 5px 0; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 500px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+
+    #chatBox {
+      height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 15px;
+      background: #fafafa;
+      border-radius: 5px;
+    }
+
+    .bot, .user {
+      margin: 10px 0;
+      padding: 10px 15px;
+      border-radius: 20px;
+      max-width: 80%;
+      word-wrap: break-word;
+      font-size: 14px;
+    }
+
+    .bot {
+      background: #e0e0e0;
+      color: #333;
+      align-self: flex-start;
+    }
+
+    .user {
+      background: #0077cc;
+      color: white;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+
+    #chatInput {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #aaa;
+    }
   </style>
 </head>
 <body>
+  <div class="chat-container">
+    <div id="chatBox"></div>
+    <input type="text" id="chatInput" placeholder="Type a message and hit Enter...">
+  </div>
 
-<h2>👋 Welcome to DecoBot</h2>
-<p>Your smart assistant for interior design consultations</p>
+  <script>
+    const chatBox = document.getElementById("chatBox");
+    const input = document.getElementById("chatInput");
 
-<div id="chatBox"></div>
-<input type="text" id="chatInput" placeholder="Type here and press Enter...">
+    const sendMessage = (text, from = 'bot') => {
+      const msg = document.createElement("div");
+      msg.className = from;
+      msg.textContent = from === 'bot' ? `DecoBot: ${text}` : text;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    };
 
-<script>
-  const steps = [
-    "Hi! What space are you designing? (e.g. Kitchen, Bedroom)",
-    "What's your preferred style? (Minimalist, Luxe, Modern)",
-    "What’s your budget? (Under 1L, 1–3L, 3–5L, 5L+)",
-    "Which city are you located in?",
-    "Great! What’s your name?",
-    "And your contact email/phone?",
-    "Thank you! We'll reach out soon with ideas and estimates!"
-  ];
-  let step = 0;
-  const userData = {};
-  const chatBox = document.getElementById("chatBox");
-  const input = document.getElementById("chatInput");
-
-  function sendMessage(text, from) {
-    const msg = document.createElement("div");
-    msg.className = from;
-    msg.innerText = (from === 'bot' ? "DecoBot: " : "You: ") + text;
-    chatBox.appendChild(msg);
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-
-  function askQuestion() {
-    setTimeout(() => sendMessage(steps[step], 'bot'), 300);
-  }
-
-  function handleInput(e) {
-    if (e.key === "Enter") {
-      const value = input.value.trim();
-      if (!value) return;
-      sendMessage(value, 'user');
-      input.value = '';
-      const keys = ["room", "style", "budget", "city", "name", "contact"];
-      if (step < keys.length) userData[keys[step]] = value;
-      step++;
-      if (step < steps.length) {
-        askQuestion();
-      } else {
-        console.log("Captured:", userData);
-        sendMessage("All done! Check your inbox soon. 📨", 'bot');
+    const next = (step, value) => {
+      if (step === 0) {
+        userData.name = value;
+        sendMessage(`Hi ${value}! What room are you designing today?`);
+      } else if (step === 1) {
+        userData.room = value;
+        sendMessage(`Great! Do you have a style in mind (modern, boho, traditional)?`);
+      } else if (step === 2) {
+        userData.style = value;
+        sendMessage(`Thanks! One last thing, what’s your budget range?`);
+      } else if (step === 3) {
+        userData.budget = value;
+        sendMessage(`Perfect! We'll review your preferences and get back with a quote.`, 'bot');
       }
-    }
-  }
+    };
 
-  input.addEventListener("keypress", handleInput);
-  askQuestion();
-</script>
+    let userData = {};
+    let step = 0;
 
+    input.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        const val = this.value.trim();
+        if (!val) return;
+        sendMessage(val, 'user');
+        next(step, val);
+        this.value = "";
+        step++;
+      }
+    });
+
+    sendMessage("Hi! I’m DecoBot. What’s your name?");
+  </script>
 </body>
 </html>
