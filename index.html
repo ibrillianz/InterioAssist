@@ -1,117 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
   <title>DecoBot – Interior Design Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Quicksand', sans-serif;
       background: #f4f4f4;
       display: flex;
       justify-content: center;
-      padding: 40px;
+      padding: 30px;
     }
-
-    .chat-container {
+    .chat-box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
       width: 100%;
       max-width: 500px;
-      background: #fff;
-      border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      padding: 20px;
     }
-
-    #chatBox {
-      height: 400px;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin-bottom: 15px;
-      background: #fafafa;
-      border-radius: 5px;
-    }
-
-    .bot, .user {
-      margin: 10px 0;
-      padding: 10px 15px;
-      border-radius: 20px;
-      max-width: 80%;
-      word-wrap: break-word;
-      font-size: 14px;
-    }
-
-    .bot {
-      background: #e0e0e0;
-      color: #333;
-      align-self: flex-start;
-    }
-
-    .user {
-      background: #0077cc;
-      color: white;
-      align-self: flex-end;
-      margin-left: auto;
-    }
-
-    #chatInput {
+    .chat-box input, .chat-box textarea {
       width: 100%;
       padding: 10px;
-      font-size: 16px;
+      margin: 10px 0;
       border-radius: 6px;
-      border: 1px solid #aaa;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    .response {
+      margin-top: 15px;
+      background: #eef;
+      padding: 10px;
+      border-radius: 6px;
     }
   </style>
 </head>
 <body>
-  <div class="chat-container">
-    <div id="chatBox"></div>
-    <input type="text" id="chatInput" placeholder="Type a message and hit Enter...">
+  <div class="chat-box">
+    <h2>DecoBot 🧠 – Interior AI Assistant</h2>
+    <p>Welcome to Tener Interiors. I'm your design assistant. May I know your name so we can tailor your experience?</p>
+    <input type="text" id="name" placeholder="Your name">
+    <p>Thank you. May I have your email or phone number so our design team can follow up with personalized ideas?</p>
+    <input type="text" id="contact" placeholder="Email or phone">
+    <p>Perfect! Now feel free to ask any question about styles, layout tips, color combinations, or anything related to your space.</p>
+    <textarea id="question" rows="4" placeholder="Ask your interior design question..."></textarea>
+    <button onclick="askBot()">Ask DecoBot</button>
+    <div class="response" id="response"></div>
   </div>
 
   <script>
-    const chatBox = document.getElementById("chatBox");
-    const input = document.getElementById("chatInput");
+    async function askBot() {
+      const name = document.getElementById("name").value.trim();
+      const contact = document.getElementById("contact").value.trim();
+      const question = document.getElementById("question").value.trim();
+      const resBox = document.getElementById("response");
 
-    const sendMessage = (text, from = 'bot') => {
-      const msg = document.createElement("div");
-      msg.className = from;
-      msg.textContent = from === 'bot' ? `DecoBot: ${text}` : text;
-      chatBox.appendChild(msg);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    };
-
-    const next = (step, value) => {
-      if (step === 0) {
-        userData.name = value;
-        sendMessage(`Hi ${value}! What room are you designing today?`);
-      } else if (step === 1) {
-        userData.room = value;
-        sendMessage(`Great! Do you have a style in mind (modern, boho, traditional)?`);
-      } else if (step === 2) {
-        userData.style = value;
-        sendMessage(`Thanks! One last thing, what’s your budget range?`);
-      } else if (step === 3) {
-        userData.budget = value;
-        sendMessage(`Perfect! We'll review your preferences and get back with a quote.`, 'bot');
+      if (!name || !contact || !question) {
+        resBox.innerHTML = "Please fill all fields before submitting.";
+        return;
       }
-    };
 
-    let userData = {};
-    let step = 0;
+      resBox.innerHTML = "Thinking... 🤖";
 
-    input.addEventListener("keypress", function (e) {
-      if (e.key === "Enter") {
-        const val = this.value.trim();
-        if (!val) return;
-        sendMessage(val, 'user');
-        next(step, val);
-        this.value = "";
-        step++;
-      }
-    });
+      const response = await fetch("https://your-decobot-api.com/api/ask", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name, contact, question })
+      });
 
-    sendMessage("Hi! I’m DecoBot. What’s your name?");
+      const data = await response.json();
+      resBox.innerHTML = `<strong>DecoBot:</strong><br>${data.answer}<br><br>We'll be in touch soon! For more inspiration, follow us on Instagram <a href="https://instagram.com/tenerinteriors" target="_blank">@tenerinteriors</a> 🌿✨`;
+    }
   </script>
 </body>
 </html>
