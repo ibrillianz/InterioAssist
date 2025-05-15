@@ -2,60 +2,47 @@ import { WIDGET_CONFIG } from "./config.js";
 
 // Apply CSS variables dynamically
 const root = document.documentElement;
-root.style.setProperty("--launcher-size", `${WIDGET_CONFIG.launcherSize}px`);
-root.style.setProperty("--launcher-bg", WIDGET_CONFIG.launcherColor);
-root.style.setProperty("--widget-width", `${WIDGET_CONFIG.widgetWidth}px`);
-root.style.setProperty("--widget-max-h", `${WIDGET_CONFIG.widgetMaxHeight}px`);
-root.style.setProperty("--header-bg", WIDGET_CONFIG.headerBg);
-root.style.setProperty("--header-text", WIDGET_CONFIG.headerText);
-root.style.setProperty("--bubble-user", WIDGET_CONFIG.bubbleUserBg);
-root.style.setProperty("--bubble-hover", WIDGET_CONFIG.bubbleUserHover);
-root.style.setProperty("--input-bg", WIDGET_CONFIG.inputBg);
-root.style.setProperty("--input-border", WIDGET_CONFIG.inputBorder);
-root.style.setProperty("--btn-bg", WIDGET_CONFIG.buttonBg);
-root.style.setProperty("--btn-text", WIDGET_CONFIG.buttonText);
-root.style.setProperty("--break-point", `${WIDGET_CONFIG.breakPoint}px`);
+Object.entries({
+  "--launcher-size": `${WIDGET_CONFIG.launcherSize}px`,
+  "--launcher-bg": WIDGET_CONFIG.launcherColor,
+  "--widget-width": `${WIDGET_CONFIG.widgetWidth}px`,
+  "--widget-max-h": `${WIDGET_CONFIG.widgetMaxHeight}px`,
+  "--header-bg": WIDGET_CONFIG.headerBg,
+  "--header-text": WIDGET_CONFIG.headerText,
+  "--bubble-user": WIDGET_CONFIG.bubbleUserBg,
+  "--bubble-hover": WIDGET_CONFIG.bubbleUserHover,
+  "--input-bg": WIDGET_CONFIG.inputBg,
+  "--input-border": WIDGET_CONFIG.inputBorder,
+  "--btn-bg": WIDGET_CONFIG.buttonBg,
+  "--btn-text": WIDGET_CONFIG.buttonText,
+  "--break-point": `${WIDGET_CONFIG.breakPoint}px`
+}).forEach(([prop, value]) => root.style.setProperty(prop, value));
 
-// Configure launcher
+// Configure launcher & header
 const launcher = document.getElementById("chatLauncher");
-launcher.style.width = `${WIDGET_CONFIG.launcherSize}px`;
-launcher.style.height = `${WIDGET_CONFIG.launcherSize}px`;
-launcher.style.backgroundColor = WIDGET_CONFIG.launcherColor;
-launcher.style.backgroundImage = `url('${WIDGET_CONFIG.launcherIcon}')`;
+launcher.style.cssText += `
+  width: ${WIDGET_CONFIG.launcherSize}px;
+  height: ${WIDGET_CONFIG.launcherSize}px;
+  background-color: ${WIDGET_CONFIG.launcherColor};
+  background-image: url('${WIDGET_CONFIG.launcherIcon}');
+`;
+const header = document.getElementById("chatHeader");
+header.childNodes[0].textContent = WIDGET_CONFIG.botName;
 
-// Configure header title
-const headerTitleNode = document.getElementById("chatHeader").childNodes[0];
-headerTitleNode.textContent = WIDGET_CONFIG.botName;
-
-// Chat widget logic
+// Widget toggling and input handling
 const chatWidget = document.getElementById("chatWidget");
-const launcherIcon = document.getElementById("chatLauncher");
-const closeBtn = document.getElementById("closeBtn");
-const userInput = document.getElementById("userInput");
+launcher.onclick = () => chatWidget.style.display = chatWidget.style.display === "flex" ? "none" : "flex";
 
-launcherIcon.onclick = toggleChat;
-closeBtn.onclick = toggleChat;
+window.handleOption = type => {
+  const prompts = {
+    home: "What kind of home are you designing?",
+    project: "Please share your project ID or details:"
+  };
+  document.getElementById("userInput").value = prompts[type] || "Please type your question below.";
+};
 
-function toggleChat() {
-  chatWidget.style.display = chatWidget.style.display === "flex" ? "none" : "flex";
-}
-
-function handleOption(type) {
-  if (type === "home") {
-    userInput.value = "What kind of home are you designing?";
-  } else if (type === "project") {
-    userInput.value = "Please share your project ID or details:";
-  } else {
-    userInput.value = "Please type your question below.";
-  }
-}
-
-window.handleOption = handleOption;
-
-function submitInput() {
-  const value = userInput.value;
-  alert(`Your message: ${value} has been noted! A team member will get in touch.`);
-  userInput.value = "";
-}
-
-window.submitInput = submitInput;
+window.submitInput = () => {
+  const input = document.getElementById("userInput");
+  alert(`Your message: ${input.value} has been noted! A team member will get in touch.`);
+  input.value = "";
+};
