@@ -5,158 +5,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tener Interiors – DecoBot</title>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet"/>
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Quicksand', sans-serif;
-    }
-    body {
-      margin: 0;
-      padding: 0;
-    }
-    #chatLauncher {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      width: 60px;
-      height: 60px;
-      background-color: #C5A880;
-      border-radius: 50%;
-      background-image: url('https://raw.githubusercontent.com/ibrillianz/deco-bot/main/Tener%20Icon%20-%20Tener%20Universe%20(1).jpg');
-      background-size: 60%;
-      background-repeat: no-repeat;
-      background-position: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
-      z-index: 999;
-    }
-    #chatWidget {
-      position: fixed;
-      bottom: 100px;
-      right: 24px;
-      width: 350px;
-      max-height: 550px;
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-      z-index: 999;
-    }
-    #chatHeader {
-      background-color: #C5A880;
-      color: white;
-      padding: 16px;
-      font-size: 1rem;
-      font-weight: 600;
-      position: relative;
-    }
-    #closeBtn {
-      position: absolute;
-      right: 16px;
-      top: 16px;
-      cursor: pointer;
-      font-size: 1.2rem;
-      color: white;
-    }
-    #chatContent {
-      padding: 16px;
-      font-size: 0.95rem;
-      line-height: 1.4;
-    }
-    .optionButton {
-      background: #f0f0f0;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 12px;
-      margin: 5px 0;
-      width: 100%;
-      cursor: pointer;
-      text-align: left;
-      transition: background 0.2s;
-    }
-    .optionButton:hover {
-      background: #ececec;
-    }
-    #inputField {
-      padding: 12px 16px;
-      border-top: 1px solid #eee;
-      display: flex;
-      gap: 8px;
-    }
-    #inputField input {
-      flex-grow: 1;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 8px;
-      font-size: 0.9rem;
-    }
-    #inputField button {
-      background: #C5A880;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    @media screen and (max-width: 600px) {
-      #chatWidget {
-        width: 90%;
-        right: 5%;
-        bottom: 90px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-<div id="chatLauncher" onclick="toggleChat()"></div>
+  <!-- Chat Launcher Button -->
+  <div id="chatLauncher"></div>
 
-<div id="chatWidget">
-  <div id="chatHeader">
-    Design Assistant
-    <div id="closeBtn" onclick="toggleChat()">×</div>
+  <!-- Chat Widget Container -->
+  <div id="chatWidget">
+    <div id="chatHeader">
+      Design Assistant
+      <div id="closeBtn">×</div>
+    </div>
+    <div id="chatContent">
+      <p>Welcome to Tener Interiors 👋</p>
+      <p>I’m your Design Assistant. How can I help you today?</p>
+      <button class="optionButton" onclick="handleOption('home')">
+        🏠 Home interior solutions
+      </button>
+      <button class="optionButton" onclick="window.open(
+        'https://wa.me/919515210666?text=Hi%20Tener%20Team%2C%20I%27d%20like%20to%20book%20a%20design%20consultation.',
+        '_blank'
+      )">
+        📅 Meet a designer
+      </button>
+      <button class="optionButton" onclick="window.open(
+        'https://www.tenerinteriors.com/designs', '_blank'
+      )">
+        🖼️ Explore our design gallery
+      </button>
+      <button class="optionButton" onclick="handleOption('project')">
+        📁 Query about an existing project
+      </button>
+      <button class="optionButton" onclick="handleOption('other')">
+        💬 Other questions
+      </button>
+    </div>
+    <div id="inputField">
+      <input type="text" id="userInput" placeholder="Type your message..." />
+      <button onclick="submitInput()">Send</button>
+    </div>
   </div>
-  <div id="chatContent">
-    <p>Welcome to Tener Interiors 👋</p>
-    <p>I’m your Design Assistant. How can I help you today?</p>
-    <button class="optionButton" onclick="handleOption('home')">🏠 Home interior solutions</button>
-    <button class="optionButton" onclick="window.open('https://wa.me/919515210666?text=Hi%20Tener%20Team%2C%20I%27d%20like%20to%20book%20a%20design%20consultation.', '_blank')">📅 Meet a designer</button>
-    <button class="optionButton" onclick="window.open('https://www.tenerinteriors.com/designs', '_blank')">🖼️ Explore our design gallery</button>
-    <button class="optionButton" onclick="handleOption('project')">📁 Query about an existing project</button>
-    <button class="optionButton" onclick="handleOption('other')">💬 Other questions</button>
-  </div>
-  <div id="inputField">
-    <input type="text" id="userInput" placeholder="Type your message..." />
-    <button onclick="submitInput()">Send</button>
-  </div>
-</div>
 
-<script>
-  function toggleChat() {
-    const chat = document.getElementById("chatWidget");
-    chat.style.display = (chat.style.display === "none" || chat.style.display === "") ? "flex" : "none";
-  }
-
-  function handleOption(type) {
-    const input = document.getElementById("userInput");
-    if (type === "home") {
-      input.value = "What kind of home are you designing?";
-    } else if (type === "project") {
-      input.value = "Please share your project ID or details:";
-    } else {
-      input.value = "Please type your question below.";
-    }
-  }
-
-  function submitInput() {
-    const value = document.getElementById("userInput").value;
-    alert("Your message: " + value + " has been noted! A team member will get in touch.");
-    document.getElementById("userInput").value = "";
-  }
-</script>
-
+  <!-- Load our widget logic -->
+  <script type="module" src="main.js"></script>
 </body>
 </html>
