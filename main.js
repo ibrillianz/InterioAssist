@@ -29,7 +29,7 @@ launcher.style.cssText += `
 const header = document.getElementById("chatHeader");
 header.childNodes[0].textContent = WIDGET_CONFIG.botName;
 
-// Widget toggling and input handling
+// Chat widget toggle and handlers
 const chatWidget = document.getElementById("chatWidget");
 launcher.onclick = () => chatWidget.style.display = chatWidget.style.display === "flex" ? "none" : "flex";
 
