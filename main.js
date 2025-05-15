@@ -1,3 +1,4 @@
+import { handleMessage } from "./engine/src/engine.js";
 import { WIDGET_CONFIG } from "./config.js";
 
 // Apply CSS variables dynamically
@@ -40,10 +41,4 @@ window.handleOption = type => {
     project: "Please share your project ID or details:"
   };
   document.getElementById("userInput").value = prompts[type] || "Please type your question below.";
-};
-
-window.submitInput = () => {
-  const input = document.getElementById("userInput");
-  alert(`Your message: ${input.value} has been noted! A team member will get in touch.`);
-  input.value = "";
 };
