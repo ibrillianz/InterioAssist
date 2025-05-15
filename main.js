@@ -5,6 +5,7 @@ const root = document.documentElement;
 Object.entries({
   "--launcher-size": `${WIDGET_CONFIG.launcherSize}px`,
   "--launcher-bg": WIDGET_CONFIG.launcherColor,
+  "--launcher-icon":    `url('${WIDGET_CONFIG.launcherIcon}')`,
   "--widget-width": `${WIDGET_CONFIG.widgetWidth}px`,
   "--widget-max-h": `${WIDGET_CONFIG.widgetMaxHeight}px`,
   "--header-bg": WIDGET_CONFIG.headerBg,
