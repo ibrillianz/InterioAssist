@@ -128,3 +128,7 @@ body {
     right: 5%;
   }
 }
+#chatLauncher {
+  /* Ensure we always use the CSS variable, even if inline styles linger */
+  background-image: var(--launcher-icon) !important;
+}
