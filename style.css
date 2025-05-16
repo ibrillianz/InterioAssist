@@ -133,3 +133,33 @@ body {
   /* Ensure we always use the CSS variable, even if inline styles linger */
   background-image: var(--launcher-icon) !important;
 }
+/* ------------- Enhancements for v5.6 ------------- */
+
+/* 1. Bigger launcher */
+:root {
+  --launcher-size: 80px; /* was 60px */
+}
+
+/* 2. Responsive base font sizing */
+html {
+  font-size: 16px;      /* default */
+}
+@media screen and (max-width: 600px) {
+  html {
+    font-size: 18px;    /* bump up fonts on small screens */
+  }
+}
+
+/* 3. Scrollable chat history */
+#chatContent {
+  overflow-y: auto;
+  max-height: calc(var(--widget-max-h) - 120px); /* leave room for header & input */
+}
+
+/* 4. Mobile widget full-width tweak */
+@media screen and (max-width: var(--break-point)) {
+  #chatWidget {
+    width: 95%;           /* take more of the screen */
+    bottom: calc(var(--launcher-size) + 16px);
+  }
+}
