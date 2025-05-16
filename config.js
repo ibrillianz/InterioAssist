@@ -17,24 +17,26 @@ export const WIDGET_CONFIG = {
   buttonText:     "#FFFFFF",
   breakPoint:     600                           // px breakpoint for mobile
 };
-// 1) Rename your existing array:
+// 1) Residential flow
 export const RESIDENTIAL_STEPS = [
-  { key: "projectType",  prompt: "What type of project are you working on?", type: "options", options: ["Residential","Commercial"] },
+  { key: "projectType",  prompt: "What type of project are you working on?",                     type: "options", options: ["Residential","Commercial"] },
   { key: "spaceType",    prompt: "What space are you designing? (Full Home, Kitchen, Bedroom, etc.)", type: "options", options: ["Full Home","Kitchen","Bedroom","Living Room","Other"] },
-  { key: "contactInfo",  prompt: "Please enter your Name, Email & Phone:", type: "input" },
-  { key: "finishTier",   prompt: "Select your finish tier:", type: "options", options: [Economy","Standard","Premium"] },
-  { key: "timeline",     prompt: "When would you like to start your project?", type: "options", options: ["Immediate","Within 30 Days","3–6 Months","Not Sure"] },
-  { key: "pincode",      prompt: "What’s your project pincode? (Hyderabad area only)", type: "input" },
-  { key: "estimate",     prompt: "Would you like a price estimate?", type: "options", options: ["Yes","No"] },
-  { key: "cta",          prompt: "Thank you! We’ll follow up with you shortly.", type: "cta" }
+  { key: "contactInfo",  prompt: "Please enter your Name, Email & Phone:",                        type: "input" },
+  { key: "finishTier",   prompt: "Select your finish tier:",                                      type: "options", options: ["Economy","Standard","Premium"] },
+  { key: "timeline",     prompt: "When would you like to start your project?",                    type: "options", options: ["Immediate","Within 30 Days","3–6 Months","Not Sure"] },
+  { key: "pincode",      prompt: "What’s your project pincode? (Hyderabad area only)",           type: "input" },
+  { key: "estimate",     prompt: "Would you like a price estimate?",                              type: "options", options: ["Yes","No"] },
+  { key: "cta",          prompt: "Thank you! We’ll follow up with you shortly.",                   type: "cta" }
 ];
-// 2) Append the new COMMERCIAL_STEPS array right after:
+
+// 2) Commercial flow
 export const COMMERCIAL_STEPS = [
-  { key: "projectType",prompt: "What kind of commercial space are you designing?", type: "options", options: ["Office","Retail Store","Restaurant/Café","Hospitality","Other"]},
-  { key: "spaceSpec", prompt: "Please select the area you’re outfitting.", type: "options", options: ["Workstations","Meeting Rooms","Reception","Retail Floor","Other"]},
-  { key:  "contactInfo", prompt: "Enter Company Name, Contact Person, Email & Phone (comma-separated).", type: "input"},
-  { key:   "budgetTier", prompt: "Which budget tier suits your project?", type: "options", options: ["Economy","Standard","Premium"]},
-  { key:   "timeline", prompt: "When do you need this completed?", type: "options", options: ["Within 1 Month","1–3 Months","3–6 Months","Flexible"]},
-  { key:   "pincode", prompt: "What’s the project pincode? (Hyderabad area only)", type: "input"},
-  { key:   "estimate", prompt: "Would you like an estimated cost?", type: "options", options: ["Yes","No"]  },
-  { key:   "cta", prompt: "Thank you! How would you like to proceed?", type: "options", options: ["Book WhatsApp","View Case Studies","Speak to Project Manager"] }];
+  { key: "projectType", prompt: "What kind of commercial space are you designing?",              type: "options", options: ["Office","Retail Store","Restaurant/Café","Hospitality","Other"] },
+  { key: "spaceSpec",   prompt: "Please select the area you’re outfitting.",                      type: "options", options: ["Workstations","Meeting Rooms","Reception","Retail Floor","Other"] },
+  { key: "contactInfo", prompt: "Enter Company Name, Contact Person, Email & Phone (comma-separated).", type: "input" },
+  { key: "budgetTier",  prompt: "Which budget tier suits your project?",                         type: "options", options: ["Economy","Standard","Premium"] },
+  { key: "timeline",    prompt: "When do you need this completed?",                              type: "options", options: ["Within 1 Month","1–3 Months","3–6 Months","Flexible"] },
+  { key: "pincode",     prompt: "What’s the project pincode? (Hyderabad area only)",           type: "input" },
+  { key: "estimate",    prompt: "Would you like an estimated cost?",                             type: "options", options: ["Yes","No"] },
+  { key: "cta",         prompt: "Thank you! How would you like to proceed?",                    type: "options", options: ["Book WhatsApp","View Case Studies","Speak to Project Manager"] }
+];
