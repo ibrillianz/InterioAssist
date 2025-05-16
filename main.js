@@ -86,7 +86,19 @@ window.submitStep = async () => {
   const inputEl = document.getElementById("userInput");
   const text    = inputEl.value.trim();
   if (!text) return;
-
+if (currentSteps[currentStep].key === "contactInfo") {
+    const parts = text.split(",").map(s => s.trim());
+    const [name, email, phone] = parts;
+    const emailRe = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+    const phoneRe = /^[6-9]\d{9}$/;
+    if (parts.length !== 3 || !emailRe.test(email) || !phoneRe.test(phone)) {
+      alert(
+        "Please enter Name, Email & Phone separated by commas, e.g.\n" +
+        "John Doe, john@example.com, 9123456789"
+      );
+      return;
+    }
+  }
   const key = currentSteps[currentStep].key;
   responses[key] = text;
   currentStep++;
