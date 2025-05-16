@@ -4,7 +4,7 @@ import { handleMessage } from "./engine/src/engine.js";
 import { calculatePrice } from "./calculator.js";
 import { WIDGET_CONFIG, RESIDENTIAL_STEPS, COMMERCIAL_STEPS } from "./config.js";
 
-// ... existing code ...
+// --- 1) Apply CSS vars ---
 const root = document.documentElement;
 Object.entries({
   "--launcher-size": `${WIDGET_CONFIG.launcherSize}px`,
@@ -23,7 +23,7 @@ Object.entries({
   "--break-point":   `${WIDGET_CONFIG.breakPoint}px`
 }).forEach(([k, v]) => root.style.setProperty(k, v));
 
-// ... existing code ...
+// --- 2) Setup launcher & header ---
 const launcher = document.getElementById("chatLauncher");
 launcher.style.cssText += `
   width: ${WIDGET_CONFIG.launcherSize}px;
@@ -33,12 +33,12 @@ launcher.style.cssText += `
 `;
 document.getElementById("chatHeader").childNodes[0].textContent = WIDGET_CONFIG.botName;
 
-// ... existing code ...
+// --- 3) Questionnaire state ---
 let currentSteps = null;
 let currentStep  = 0;
 let responses    = {};
 
-// ... existing code ...
+// --- 4) Render a question or CTA ---
 function showStep() {
   const { prompt, type, options } = currentSteps[currentStep];
   const content = document.getElementById("chatContent");
@@ -61,14 +61,17 @@ function showStep() {
     ).join("");
   }
 
+  // Append FAQ button
+  html += `<button class="optionButton" style="margin-top:12px;" onclick="showFAQ()">View FAQ</button>`;
+
   content.innerHTML = html;
 }
 
-// ... existing code ...
+// --- 5) Handle option clicks (including first branch) ---
 window.selectOption = async val => {
   if (currentSteps === null) {
     responses.projectType = val;
-    currentSteps = (val === "Commercial") ? COMMERCIAL_STEPS : RESIDENTIAL_STEPS;
+    currentSteps = val === "Commercial" ? COMMERCIAL_STEPS : RESIDENTIAL_STEPS;
     currentStep  = 0;
     showStep();
     return;
@@ -76,24 +79,23 @@ window.selectOption = async val => {
 
   const key = currentSteps[currentStep].key;
 
-  // ⬇️ Intercept the “estimate” answer for options-based selection
+  // Intercept estimate (options)
   if (key === "estimate" && val === "Yes") {
     responses[key] = val;
     const cost = calculatePrice(responses);
-    const content = document.getElementById("chatContent");
-    content.innerHTML = `<p>Estimated cost: ₹${cost.toLocaleString()}</p>`;
+    document.getElementById("chatContent").innerHTML = `<p>Estimated cost: ₹${cost.toLocaleString()}</p>`;
     currentStep++;
-    showStep();  // proceed to CTA step
+    showStep();
     return;
   }
 
   responses[key] = val;
   currentStep++;
   if (currentStep < currentSteps.length) showStep();
-  else showStep();  // render CTA step
+  else showStep();
 };
 
-// ... existing code ...
+// --- 6) Handle text submissions ---
 window.submitStep = async () => {
   const inputEl = document.getElementById("userInput");
   const text    = inputEl.value.trim();
@@ -101,6 +103,7 @@ window.submitStep = async () => {
 
   const key = currentSteps[currentStep].key;
 
+  // Contact Info validation
   if (key === "contactInfo") {
     const parts = text.split(",").map(s => s.trim());
     if (parts.length !== 3) {
@@ -120,35 +123,76 @@ window.submitStep = async () => {
     }
   }
 
-  // ⬇️ Intercept the “estimate” answer for text-based input (if ever used)
+  // Pincode validation
+  if (key === "pincode") {
+    const pinRe = /^[0-9]{6}$/;
+    if (!pinRe.test(text)) {
+      alert("⚠️ Please enter a valid 6-digit pincode.");
+      return;
+    }
+  }
+
+  // Estimate intercept (text)
   if (key === "estimate" && text === "Yes") {
     responses[key] = text;
     const cost = calculatePrice(responses);
-    const content = document.getElementById("chatContent");
-    content.innerHTML = `<p>Estimated cost: ₹${cost.toLocaleString()}</p>`;
+    document.getElementById("chatContent").innerHTML = `<p>Estimated cost: ₹${cost.toLocaleString()}</p>`;
     currentStep++;
-    showStep();  // proceed to CTA step
+    showStep();
     return;
   }
 
+  // Record response and advance
   responses[key] = text;
   currentStep++;
   if (currentStep < currentSteps.length) showStep();
-  else showStep();  // render CTA step
+  else showStep();
 };
 
-// ... existing code ...
+// --- 7) FAQ support (injected earlier) ---
+/* showFAQ() and resumeFlow() assumed present */
+
+// --- 8) Map CTAs to actions ---
 const CTA_ACTIONS = {
-  /* ... */
+  "Book WhatsApp":            () => window.open("https://wa.me/919515210666?text=Hi%20Tener%20Team","_blank"),
+  "View Case Studies":        () => window.open("https://www.tenerinteriors.com/commercial-case-studies","_blank"),
+  "Speak to Project Manager": () => window.open("https://www.tenerinteriors.com/contact","_blank"),
+  "Check Existing Projects":  () => window.open("https://www.tenerinteriors.com/projects","_blank"),
+  "Design Gallery":           () => window.open("https://www.tenerinteriors.com/designs","_blank"),
+  "FAQ":                      () => window.open("https://www.tenerinteriors.com/faq","_blank")
 };
-
 window.handleCTA = async label => {
-  /* ... */
+  const action = CTA_ACTIONS[label];
+  if (action) action();
+  await finalizeFlow();
 };
 
-// ... existing code ...
-async function finalizeFlow() { /* ... */ }
+// --- 9) Finalize and close ---
+async function finalizeFlow() {
+  const reply = await handleMessage("decobot", JSON.stringify(responses), null);
+  alert(reply);
+  document.getElementById("chatWidget").style.display = "none";
+}
+
+// --- 10) Toggle widget ---
 const chatWidget = document.getElementById("chatWidget");
-launcher.onclick = () => { /* ... */ };
-document.addEventListener("keydown", e => { /* ... */ });
+launcher.onclick = () => {
+  const isOpen = chatWidget.style.display === "flex";
+  chatWidget.style.display = isOpen ? "none" : "flex";
+  if (!isOpen) {
+    currentSteps = null;
+    currentStep  = 0;
+    responses    = {};
+    showStep();
+  }
+};
+
+// --- 11) Enter key support ---
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter" && document.activeElement.id === "userInput") {
+    submitStep();
+  }
+});
+
+// --- 12) Start hidden ---
 chatWidget.style.display = "none";
