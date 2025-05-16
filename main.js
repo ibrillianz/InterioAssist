@@ -1,3 +1,5 @@
+// main.js
+
 import { handleMessage } from "./engine/src/engine.js";
 import { WIDGET_CONFIG, RESIDENTIAL_STEPS, COMMERCIAL_STEPS } from "./config.js";
 
@@ -53,7 +55,6 @@ function showStep() {
       </div>
     `;
   } else if (type === "cta") {
-    // Final CTAs
     html += options.map(opt =>
       `<button class="optionButton" onclick="handleCTA('${opt}')">${opt}</button>`
     ).join("");
@@ -64,7 +65,6 @@ function showStep() {
 
 // 5) Handle option clicks (including first branch)
 window.selectOption = async val => {
-  // First answer = projectType branch selector
   if (currentSteps === null) {
     responses.projectType = val;
     currentSteps = (val === "Commercial") ? COMMERCIAL_STEPS : RESIDENTIAL_STEPS;
@@ -73,12 +73,11 @@ window.selectOption = async val => {
     return;
   }
 
-  // Record response and advance
   const key = currentSteps[currentStep].key;
   responses[key] = val;
   currentStep++;
   if (currentStep < currentSteps.length) showStep();
-  else finalizeFlow();  // after last step we’ll render CTAs, not auto-close
+  else showStep();  // render CTA step
 };
 
 // 6) Handle text submissions
@@ -86,34 +85,42 @@ window.submitStep = async () => {
   const inputEl = document.getElementById("userInput");
   const text    = inputEl.value.trim();
   if (!text) return;
-if (currentSteps[currentStep].key === "contactInfo") {
+
+  const key = currentSteps[currentStep].key;
+
+  if (key === "contactInfo") {
     const parts = text.split(",").map(s => s.trim());
+    if (parts.length !== 3) {
+      alert("⚠️ Please enter Name, Email & Phone separated by commas.");
+      return;
+    }
     const [name, email, phone] = parts;
     const emailRe = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
     const phoneRe = /^[6-9]\d{9}$/;
-    if (parts.length !== 3 || !emailRe.test(email) || !phoneRe.test(phone)) {
-      alert(
-        "Please enter Name, Email & Phone separated by commas, e.g.\n" +
-        "John Doe, john@example.com, 9123456789"
-      );
+    if (!emailRe.test(email)) {
+      alert("⚠️ Please enter a valid email (e.g., john@example.com).");
+      return;
+    }
+    if (!phoneRe.test(phone)) {
+      alert("⚠️ Please enter a valid 10-digit mobile number starting with 6-9.");
       return;
     }
   }
-  const key = currentSteps[currentStep].key;
+
   responses[key] = text;
   currentStep++;
   if (currentStep < currentSteps.length) showStep();
-  else finalizeFlow();
+  else showStep();  // render CTA step
 };
 
 // 7) Map CTAs to actions
 const CTA_ACTIONS = {
-  "Book WhatsApp":       () => window.open("https://wa.me/919515210666?text=Hi%20Tener%20Team", "_blank"),
-  "View Case Studies":   () => window.open("https://www.tenerinteriors.com/commercial-case-studies", "_blank"),
+  "Book WhatsApp":            () => window.open("https://wa.me/919515210666?text=Hi%20Tener%20Team", "_blank"),
+  "View Case Studies":        () => window.open("https://www.tenerinteriors.com/commercial-case-studies", "_blank"),
   "Speak to Project Manager": () => window.open("https://www.tenerinteriors.com/contact", "_blank"),
-  "Check Existing Projects":   () => window.open("https://www.tenerinteriors.com/projects", "_blank"),
-  "Design Gallery":             () => window.open("https://www.tenerinteriors.com/designs", "_blank"),
-  "FAQ":                        () => window.open("https://www.tenerinteriors.com/faq", "_blank")
+  "Check Existing Projects":  () => window.open("https://www.tenerinteriors.com/projects", "_blank"),
+  "Design Gallery":           () => window.open("https://www.tenerinteriors.com/designs", "_blank"),
+  "FAQ":                      () => window.open("https://www.tenerinteriors.com/faq", "_blank")
 };
 
 window.handleCTA = async label => {
