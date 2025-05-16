@@ -1,9 +1,10 @@
 // main.js
 
 import { handleMessage } from "./engine/src/engine.js";
+import { calculatePrice } from "./calculator.js";
 import { WIDGET_CONFIG, RESIDENTIAL_STEPS, COMMERCIAL_STEPS } from "./config.js";
 
-// 1) Apply CSS vars
+// ... existing code ...
 const root = document.documentElement;
 Object.entries({
   "--launcher-size": `${WIDGET_CONFIG.launcherSize}px`,
@@ -22,7 +23,7 @@ Object.entries({
   "--break-point":   `${WIDGET_CONFIG.breakPoint}px`
 }).forEach(([k, v]) => root.style.setProperty(k, v));
 
-// 2) Setup launcher & header
+// ... existing code ...
 const launcher = document.getElementById("chatLauncher");
 launcher.style.cssText += `
   width: ${WIDGET_CONFIG.launcherSize}px;
@@ -32,12 +33,12 @@ launcher.style.cssText += `
 `;
 document.getElementById("chatHeader").childNodes[0].textContent = WIDGET_CONFIG.botName;
 
-// 3) Questionnaire state
+// ... existing code ...
 let currentSteps = null;
 let currentStep  = 0;
 let responses    = {};
 
-// 4) Render a question or CTA
+// ... existing code ...
 function showStep() {
   const { prompt, type, options } = currentSteps[currentStep];
   const content = document.getElementById("chatContent");
@@ -63,7 +64,7 @@ function showStep() {
   content.innerHTML = html;
 }
 
-// 5) Handle option clicks (including first branch)
+// ... existing code ...
 window.selectOption = async val => {
   if (currentSteps === null) {
     responses.projectType = val;
@@ -74,13 +75,25 @@ window.selectOption = async val => {
   }
 
   const key = currentSteps[currentStep].key;
+
+  // ⬇️ Intercept the “estimate” answer for options-based selection
+  if (key === "estimate" && val === "Yes") {
+    responses[key] = val;
+    const cost = calculatePrice(responses);
+    const content = document.getElementById("chatContent");
+    content.innerHTML = `<p>Estimated cost: ₹${cost.toLocaleString()}</p>`;
+    currentStep++;
+    showStep();  // proceed to CTA step
+    return;
+  }
+
   responses[key] = val;
   currentStep++;
   if (currentStep < currentSteps.length) showStep();
   else showStep();  // render CTA step
 };
 
-// 6) Handle text submissions
+// ... existing code ...
 window.submitStep = async () => {
   const inputEl = document.getElementById("userInput");
   const text    = inputEl.value.trim();
@@ -107,54 +120,35 @@ window.submitStep = async () => {
     }
   }
 
+  // ⬇️ Intercept the “estimate” answer for text-based input (if ever used)
+  if (key === "estimate" && text === "Yes") {
+    responses[key] = text;
+    const cost = calculatePrice(responses);
+    const content = document.getElementById("chatContent");
+    content.innerHTML = `<p>Estimated cost: ₹${cost.toLocaleString()}</p>`;
+    currentStep++;
+    showStep();  // proceed to CTA step
+    return;
+  }
+
   responses[key] = text;
   currentStep++;
   if (currentStep < currentSteps.length) showStep();
   else showStep();  // render CTA step
 };
 
-// 7) Map CTAs to actions
+// ... existing code ...
 const CTA_ACTIONS = {
-  "Book WhatsApp":            () => window.open("https://wa.me/919515210666?text=Hi%20Tener%20Team", "_blank"),
-  "View Case Studies":        () => window.open("https://www.tenerinteriors.com/commercial-case-studies", "_blank"),
-  "Speak to Project Manager": () => window.open("https://www.tenerinteriors.com/contact", "_blank"),
-  "Check Existing Projects":  () => window.open("https://www.tenerinteriors.com/projects", "_blank"),
-  "Design Gallery":           () => window.open("https://www.tenerinteriors.com/designs", "_blank"),
-  "FAQ":                      () => window.open("https://www.tenerinteriors.com/faq", "_blank")
+  /* ... */
 };
 
 window.handleCTA = async label => {
-  const action = CTA_ACTIONS[label];
-  if (action) action();
-  await finalizeFlow();
+  /* ... */
 };
 
-// 8) Finalize: send to engine, then close
-async function finalizeFlow() {
-  const reply = await handleMessage("decobot", JSON.stringify(responses), null);
-  alert(reply);
-  document.getElementById("chatWidget").style.display = "none";
-}
-
-// 9) Toggle widget open/close
+// ... existing code ...
+async function finalizeFlow() { /* ... */ }
 const chatWidget = document.getElementById("chatWidget");
-launcher.onclick = () => {
-  const isOpen = chatWidget.style.display === "flex";
-  chatWidget.style.display = isOpen ? "none" : "flex";
-  if (!isOpen) {
-    currentSteps = null;
-    currentStep  = 0;
-    responses    = {};
-    showStep();
-  }
-};
-
-// 10) Send on Enter key
-document.addEventListener("keydown", e => {
-  if (e.key === "Enter" && document.activeElement.id === "userInput") {
-    submitStep();
-  }
-});
-
-// 11) Initialize hidden
+launcher.onclick = () => { /* ... */ };
+document.addEventListener("keydown", e => { /* ... */ });
 chatWidget.style.display = "none";
