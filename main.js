@@ -35,20 +35,29 @@ let responses = {};
 
 // Show a step
 function showStep() {
-const { prompt, type, options } = currentSteps\[currentStep];
-const content = document.getElementById("chatContent");
-let html = `<p>${prompt}</p>`;
-if (type === "options") {
-html += options.map(opt =>
-`<button class="optionButton" onclick="selectOption('${opt}')">${opt}</button>`
-).join("");
-} else if (type === "input") {
-html += `       <div id="inputField">         <input type="text" id="userInput" placeholder="Type here…" />         <button onclick="submitStep()">Send</button>       </div>
+  const { prompt, type, options } = currentSteps[currentStep];
+  const content = document.getElementById("chatContent");
+  let html = `<p>${prompt}</p>`;
+
+  if (type === "options") {
+    html += options.map(opt =>
+      `<button class="optionButton" onclick="selectOption('${opt}')">${opt}</button>`
+    ).join("");
+  } else if (type === "input") {
+    html += `
+      <div id="inputField">
+        <input type="text" id="userInput" placeholder="Type here…" />
+        <button onclick="submitStep()">Send</button>
+      </div>
     `;
-} else { // cta
-html += `<p>Thank you! We’ll follow up with you shortly.</p>`;
-}
-content.innerHTML = html;
+  } 
+  // HIGHLIGHT
+  else if (type === "cta") {
+    // Final CTA step: immediately finish without rendering duplicate message
+    finalizeFlow();
+    return;
+  }
+  content.innerHTML = html;
 }
 
 // User picked an option
