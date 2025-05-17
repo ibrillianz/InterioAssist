@@ -14,7 +14,7 @@ export const WIDGET_CONFIG = {
   botName:        "Design Assistant",           // header title
   launcherSize:   60,                           // px
   launcherColor:  "#C5A880",                    // background of the launcher
-  launcherIcon:   "assets/face_new.png",        // path to your bot avatar
+  launcherIcon:   "assets/face.png",        // path to your bot avatar
   widgetWidth:    350,                          // px
   widgetMaxHeight:550,                          // px
   widgetBg:       "#FFFFFF",                    // widget background color
