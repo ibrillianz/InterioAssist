@@ -14,7 +14,7 @@ import { isWithinRadius } from "./engine/src/utils.js";
 // Log version & service area
 console.log(`DecoBot v${VERSION} — Service area:`, CLIENT_LOCATION);
 
-// Toggle chat with abandon notice
+// --- 1) Define toggleChat before wiring it ---
 window.toggleChat = () => {
   const chatWidget = document.getElementById("chatWidget");
   const isOpen     = chatWidget.style.display === "flex";
@@ -33,7 +33,16 @@ window.toggleChat = () => {
   }
 };
 
-// Map opening buttons into flow
+// --- 2) Grab launcher and attach a single click listener ---
+const launcher = document.getElementById("chatLauncher");
+launcher.addEventListener("click", toggleChat);
+
+// --- Globals for questionnaire state ---
+let currentSteps = null;
+let currentStep  = 0;
+let responses    = {};
+
+// --- Helper stubs ---
 window.selectOption = val => {
   if (currentSteps === null) {
     responses.projectType = val;
@@ -44,16 +53,14 @@ window.selectOption = val => {
     showStep();
   }
 };
-
-// FAQ stub
 window.showFAQ = () =>
   window.open("https://www.tenerinteriors.com/faq", "_blank");
 
-// Apply CSS vars
+// --- 3) Apply CSS variables dynamically ---
 const root = document.documentElement;
 Object.entries({
   "--launcher-size": `${WIDGET_CONFIG.launcherSize}px`,
-  "--launcher-bg":   "#000000", // override to black for contrast
+  "--launcher-bg":   "#000000",
   "--launcher-icon": `url('${WIDGET_CONFIG.launcherIcon}')`,
   "--widget-width":  `${WIDGET_CONFIG.widgetWidth}px`,
   "--widget-height": `calc(100vh - (var(--launcher-size) + 40px))`,
@@ -68,21 +75,7 @@ Object.entries({
   "--break-point":   `${WIDGET_CONFIG.breakPoint}px`
 }).forEach(([k, v]) => root.style.setProperty(k, v));
 
-// Setup launcher element
-const launcher = document.getElementById("chatLauncher");
-launcher.style.cssText += `
-  width: ${WIDGET_CONFIG.launcherSize}px;
-  height: ${WIDGET_CONFIG.launcherSize}px;
-  background-image: var(--launcher-icon);
-`;
-launcher.addEventListener("click", toggleChat);
-
-// Questionnaire state
-let currentSteps = null;
-let currentStep  = 0;
-let responses    = {};
-
-// Render each question or CTA
+// --- 4) Render questions or CTAs ---
 function showStep() {
   const { prompt, type, options } = currentSteps[currentStep];
   const content = document.getElementById("chatContent");
@@ -106,11 +99,10 @@ function showStep() {
   }
 
   html += `<button class="optionButton" style="margin-top:12px;" onclick="showFAQ()">View FAQ</button>`;
-
   content.innerHTML = html;
 }
 
-// Handle text input steps
+// --- 5) Handle text submissions ---
 window.submitStep = async () => {
   const inputEl = document.getElementById("userInput");
   const text    = inputEl.value.trim();
@@ -118,7 +110,7 @@ window.submitStep = async () => {
 
   const key = currentSteps[currentStep].key;
 
-  // Contact validation
+  // Contact info validation
   if (key === "contactInfo") {
     const parts = text.split(",").map(s => s.trim());
     if (parts.length !== 3 || parts[0].split(" ").length < 2) {
@@ -134,7 +126,7 @@ window.submitStep = async () => {
     }
   }
 
-  // Pincode + radius check
+  // Pincode + service-area check
   if (key === "pincode") {
     const pinRe = /^[0-9]{6}$/;
     if (!pinRe.test(text) || !(await isWithinRadius(text))) {
@@ -154,15 +146,17 @@ window.submitStep = async () => {
     return;
   }
 
-  // Save and advance
+  // Record and advance
   responses[key] = text;
   currentStep++;
   if (currentStep < currentSteps.length) showStep();
   else showStep();
 };
 
-// CTA button mapping
+// Alias for send button
 window.submitInput = window.submitStep;
+
+// --- 6) Map CTAs to actions ---
 const CTA_ACTIONS = {
   "Explore Our Gallery":    () => window.open("https://www.tenerinteriors.com/designs","_blank"),
   "View Completed Projects":() => window.open("https://www.tenerinteriors.com/projects","_blank"),
@@ -174,7 +168,7 @@ window.handleCTA = async label => {
   await finalizeFlow();
 };
 
-// Finalize: webhook + AI reply + close
+// --- 7) Finalize: webhook, AI reply, close ---
 async function finalizeFlow() {
   await fetch(CLIENT_LOCATION.webhookUrl || "<your-webhook-url>", {
     method: "POST",
@@ -186,5 +180,5 @@ async function finalizeFlow() {
   document.getElementById("chatWidget").style.display = "none";
 }
 
-// Start hidden
+// --- 8) Initialize hidden ---
 document.getElementById("chatWidget").style.display = "none";
