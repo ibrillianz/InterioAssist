@@ -1,9 +1,9 @@
 :root {
-  --launcher-size: 60px;
+  --launcher-size: 80px;
   --launcher-bg:   #C5A880;
   --launcher-icon: url('assets/face_new.png');
   --widget-width:  350px;
-  --widget-max-h:  550px;
+  --widget-max-h:  450px;
   --header-bg:     #C5A880;
   --header-text:   #FFFFFF;
   --bubble-user:   #f0f0f0;
@@ -27,14 +27,14 @@ body {
 
 #chatLauncher {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: 40px;
+  right: 40px;
   width: var(--launcher-size);
   height: var(--launcher-size);
   background-color: var(--launcher-bg);
   background-image: var(--launcher-icon);
   border-radius: 50%;
-  background-size: 60%;
+  background-size: 75% !important;
   background-repeat: no-repeat;
   background-position: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -44,16 +44,18 @@ body {
 
 #chatWidget {
   position: fixed;
-  bottom: calc(var(--launcher-size) + 24px);
-  right: 24px;
+  bottom: calc(var(--launcher-size) + 40px);
+  right: 40px;
   width: var(--widget-width);
-  max-height: var(--widget-max-h);
+  /* Responsive full-height minus launcher */
+  height: calc(100vh - (var(--launcher-size) + 40px));
+  max-height: none;             /* Remove the old cap */
   background: var(--widget-bg);
   border-radius: 20px;
   box-shadow: 0 8px 30px rgba(0,0,0,0.15);
   display: none;
   flex-direction: column;
-  overflow: hidden;
+  overflow: hidden;             /* Container hides overflow */
   z-index: 999;
 }
 
