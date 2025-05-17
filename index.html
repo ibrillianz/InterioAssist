@@ -10,7 +10,7 @@
 <body>
 
   <!-- Chat Launcher Button -->
-  <div id="chatLauncher" onclick="toggleChat()"></div>
+  <div id="chatLauncher"></div>
 
   <!-- Chat Widget Container -->
   <div id="chatWidget">
@@ -37,33 +37,18 @@
 
     <!-- Initial Chat Content -->
     <div id="chatContent">
-      <p>Welcome to Tener Interiors 👋</p>
-      <p>I’m your Design Assistant. How can I help you today?</p>
-      <button class="optionButton" onclick="handleOption('home')">
-        🏠 Home interior solutions
+      <p>Hi ! Welcome to Tener Interiors! I am <strong>Deco</strong>, your design assistant. How may we help you today?</p>
+      <button class="optionButton" onclick="selectOption('Residential')">
+        Residential Interior Solutions
       </button>
-      <button class="optionButton" onclick="window.open(
-        'https://wa.me/919515210666?text=Hi%20Tener%20Team%2C%20I%27d%20like%20to%20book%20a%20design%20consultation.',
-        '_blank'
-      )">
-        📅 Meet a designer
-      </button>
-      <button class="optionButton" onclick="window.open(
-        'https://www.tenerinteriors.com/designs', '_blank'
-      )">
-        🖼️ Explore our design gallery
-      </button>
-      <button class="optionButton" onclick="handleOption('project')">
-        📁 Query about an existing project
-      </button>
-      <button class="optionButton" onclick="handleOption('other')">
-        💬 Other questions
+      <button class="optionButton" onclick="selectOption('Commercial')">
+        Commercial Interior Solutions
       </button>
     </div>
 
     <!-- Input Field -->
     <div id="inputField">
-      <input type="text" id="userInput" placeholder="Type your message..." />
+      <input type="text" id="userInput" placeholder="Full Name, Email & Phone (comma-separated)" />
       <button onclick="toggleChat()" style="margin-right:8px;">Cancel</button>
       <button onclick="submitInput()">Send</button>
     </div>
