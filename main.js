@@ -1,7 +1,7 @@
 // main.js
 
 import { handleMessage }  from "./engine/src/engine.js";
-import { calculatePrice } from "./engine/src/calculator.js";
+// import { calculatePrice } from "./engine/src/calculator.js"; // removed public import
 import {
   WIDGET_CONFIG,
   RESIDENTIAL_STEPS,
@@ -135,16 +135,20 @@ window.submitStep = async () => {
     }
   }
 
-  // Inline estimate for options step
-if (key === "estimate" && text === "Yes") {
-  responses[key] = text;
-  const cost = calculatePrice(responses);
-  document.getElementById("chatContent").innerHTML =
-    `<p>Estimated cost: ₹${cost.toLocaleString()}</p>`;
-  currentStep++;
-  showStep();
-  return;
-}
+  // Delegate estimate to engine
+  if (key === "estimate" && text === "Yes") {
+    responses[key] = text;
+    const reply = await handleMessage("decobot_estimate", JSON.stringify(responses), null);
+    content = document.getElementById("chatContent");
+    if (typeof reply === "object" && reply.cost != null) {
+      content.innerHTML = `<p>Estimated cost: ₹${reply.cost.toLocaleString()}</p>`;
+    } else {
+      content.innerHTML = `<p>${reply}</p>`;
+    }
+    currentStep++;
+    showStep();
+    return;
+  }
 
   // Record and advance
   responses[key] = text;
@@ -158,9 +162,9 @@ window.submitInput = window.submitStep;
 
 // --- 6) Map CTAs to actions ---
 const CTA_ACTIONS = {
-  "Explore Our Gallery":    () => window.open("https://www.tenerinteriors.com/designs","_blank"),
-  "View Completed Projects":() => window.open("https://www.tenerinteriors.com/projects","_blank"),
-  "View FAQ":               () => window.open("https://www.tenerinteriors.com/faq","_blank")
+  "Explore Our Gallery":     () => window.open("https://www.tenerinteriors.com/designs","_blank"),
+  "View Completed Projects": () => window.open("https://www.tenerinteriors.com/projects","_blank"),
+  "View FAQ":                () => window.open("https://www.tenerinteriors.com/faq","_blank")
 };
 window.handleCTA = async label => {
   const action = CTA_ACTIONS[label];
