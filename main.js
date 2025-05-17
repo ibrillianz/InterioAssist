@@ -1,7 +1,7 @@
 // main.js
 
 import { handleMessage }  from "./engine/src/engine.js";
-import { calculatePrice } from "./calculator.js";
+import { calculatePrice } from "./engine/src/calculator.js";
 import {
   WIDGET_CONFIG,
   RESIDENTIAL_STEPS,
@@ -136,15 +136,15 @@ window.submitStep = async () => {
   }
 
   // Inline estimate for options step
-  if (key === "estimate" && text === "Yes") {
-    responses[key] = text;
-    const cost = calculatePrice(responses);
-    document.getElementById("chatContent").innerHTML =
-      `<p>Estimated cost: ₹${cost.toLocaleString()}</p>`;
-    currentStep++;
-    showStep();
-    return;
-  }
+if (key === "estimate" && text === "Yes") {
+  responses[key] = text;
+  const cost = calculatePrice(responses);
+  document.getElementById("chatContent").innerHTML =
+    `<p>Estimated cost: ₹${cost.toLocaleString()}</p>`;
+  currentStep++;
+  showStep();
+  return;
+}
 
   // Record and advance
   responses[key] = text;
