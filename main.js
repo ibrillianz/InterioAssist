@@ -4,6 +4,34 @@ import { handleMessage } from "./engine/src/engine.js";
 import { calculatePrice } from "./calculator.js";
 import { WIDGET_CONFIG, RESIDENTIAL_STEPS, COMMERCIAL_STEPS } from "./config.js";
 
+// --- Define global helpers ---
+// Toggle widget open/close
+window.toggleChat = () => {
+  const chatWidget = document.getElementById("chatWidget");
+  const isOpen = chatWidget.style.display === "flex";
+  chatWidget.style.display = isOpen ? "none" : "flex";
+  if (!isOpen) {
+    currentSteps = null;
+    currentStep  = 0;
+    responses    = {};
+    showStep();
+  }
+};
+
+// Alias submitInput to submitStep (for HTML button)
+window.submitInput = window.submitStep;
+
+// Handle initial option buttons
+window.handleOption = type => {
+  // map home/project/other to questionnaire branches
+  if (type === "home")       selectOption("Residential");
+  else if (type === "project") selectOption("Commercial");
+  else                         selectOption(type);
+};
+
+// FAQ stub
+window.showFAQ = () => window.open("https://www.tenerinteriors.com/faq", "_blank");
+
 // --- 1) Apply CSS vars ---
 const root = document.documentElement;
 Object.entries({
@@ -31,7 +59,6 @@ launcher.style.cssText += `
   background-color: ${WIDGET_CONFIG.launcherColor};
   background-image: var(--launcher-icon);
 `;
-document.getElementById("chatHeader").childNodes[0].textContent = WIDGET_CONFIG.botName;
 
 // --- 3) Questionnaire state ---
 let currentSteps = null;
@@ -83,7 +110,8 @@ window.selectOption = async val => {
   if (key === "estimate" && val === "Yes") {
     responses[key] = val;
     const cost = calculatePrice(responses);
-    document.getElementById("chatContent").innerHTML = `<p>Estimated cost: ₹${cost.toLocaleString()}</p>`;
+    document.getElementById("chatContent").innerHTML =
+      `<p>Estimated cost: ₹${cost.toLocaleString()}</p>`;
     currentStep++;
     showStep();
     return;
@@ -136,7 +164,8 @@ window.submitStep = async () => {
   if (key === "estimate" && text === "Yes") {
     responses[key] = text;
     const cost = calculatePrice(responses);
-    document.getElementById("chatContent").innerHTML = `<p>Estimated cost: ₹${cost.toLocaleString()}</p>`;
+    document.getElementById("chatContent").innerHTML =
+      `<p>Estimated cost: ₹${cost.toLocaleString()}</p>`;
     currentStep++;
     showStep();
     return;
@@ -149,10 +178,7 @@ window.submitStep = async () => {
   else showStep();
 };
 
-// --- 7) FAQ support (injected earlier) ---
-/* showFAQ() and resumeFlow() assumed present */
-
-// --- 8) Map CTAs to actions ---
+// --- 7) Map CTAs to actions ---
 const CTA_ACTIONS = {
   "Book WhatsApp":            () => window.open("https://wa.me/919515210666?text=Hi%20Tener%20Team","_blank"),
   "View Case Studies":        () => window.open("https://www.tenerinteriors.com/commercial-case-studies","_blank"),
@@ -167,16 +193,13 @@ window.handleCTA = async label => {
   await finalizeFlow();
 };
 
-// --- 9) Finalize and close ---
+// --- 8) Finalize and close ---
 async function finalizeFlow() {
-  // 📝 Send responses to your Apps Script webhook
-  await fetch("https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbz3KixRrhicq9olsfA1H6fha2X7S1OopRjeTjrm1mImpkJnKurbHgvsXJ4WR2tF6f1M/exec/exec", {
+  // Send responses to Apps Script webhook
+  await fetch("https://script.google.com/macros/s/AKfycbz3KixRrhicq9olsfA1H6fha2X7S1OopRjeTjrm1mImpkJnKurbHgvsXJ4WR2tF6f1M/exec", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      ...responses,
-      ctaChoice: responses.cta   // rename key if needed
-    })
+    body: JSON.stringify({ ...responses, ctaChoice: responses.cta })
   });
 
   const reply = await handleMessage("decobot", JSON.stringify(responses), null);
@@ -184,25 +207,12 @@ async function finalizeFlow() {
   document.getElementById("chatWidget").style.display = "none";
 }
 
-// --- 10) Toggle widget ---
-const chatWidget = document.getElementById("chatWidget");
-launcher.onclick = () => {
-  const isOpen = chatWidget.style.display === "flex";
-  chatWidget.style.display = isOpen ? "none" : "flex";
-  if (!isOpen) {
-    currentSteps = null;
-    currentStep  = 0;
-    responses    = {};
-    showStep();
-  }
-};
-
-// --- 11) Enter key support ---
+// --- 9) Allow Enter key for input ---
 document.addEventListener("keydown", e => {
   if (e.key === "Enter" && document.activeElement.id === "userInput") {
     submitStep();
   }
 });
 
-// --- 12) Start hidden ---
-chatWidget.style.display = "none";
+// --- 10) Initialize hidden ---
+document.getElementById("chatWidget").style.display = "none";
