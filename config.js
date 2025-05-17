@@ -1,22 +1,44 @@
 // config.js
+
+// Widget display version
+export const VERSION = "5.7";
+
+// Client’s service area configuration
+export const CLIENT_LOCATION = {
+  center: { lat: 17.3850, lon: 78.4867 },  // Hyderabad center coordinates
+  radiusKm: 80                             // Service radius in kilometers
+};
+
+// Main widget configuration
 export const WIDGET_CONFIG = {
   botName:        "Design Assistant",           // header title
   launcherSize:   60,                           // px
   launcherColor:  "#C5A880",                    // background of the launcher
-  launcherIcon: "assets/face_new.png",            // path to your bot avatar
+  launcherIcon:   "assets/face_new.png",        // path to your bot avatar
   widgetWidth:    350,                          // px
   widgetMaxHeight:550,                          // px
-  widgetBg:       "#FFFFFF",
-  headerBg:       "#C5A880",
-  headerText:     "#FFFFFF",
-  bubbleUserBg:   "#f0f0f0",
-  bubbleUserHover:"#ececec",
-  inputBg:        "#FFFFFF",
-  inputBorder:    "#ddd",
-  buttonBg:       "#C5A880",
-  buttonText:     "#FFFFFF",
+  widgetBg:       "#FFFFFF",                    // widget background color
+  headerBg:       "#C5A880",                    // header background color
+  headerText:     "#FFFFFF",                    // header text color
+  bubbleUserBg:   "#f0f0f0",                    // user-bubble background
+  bubbleUserHover:"#ececec",                    // user-bubble hover background
+  inputBg:        "#FFFFFF",                    // input field background
+  inputBorder:    "#ddd",                       // input border color
+  buttonBg:       "#C5A880",                    // button background
+  buttonText:     "#FFFFFF",                    // button text color
   breakPoint:     600                           // px breakpoint for mobile
 };
+
+// Questionnaire steps for residential projects
+export const RESIDENTIAL_STEPS = [
+  // ... existing residential steps ...
+];
+
+// Questionnaire steps for commercial projects
+export const COMMERCIAL_STEPS = [
+  // ... existing commercial steps ...
+];
+
 // 1) Residential flow
 export const RESIDENTIAL_STEPS = [
   { key: "projectType",  prompt: "What type of project are you working on?",                     type: "options", options: ["Residential","Commercial"] },
