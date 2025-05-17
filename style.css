@@ -39,7 +39,8 @@ body {
   background-position: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  z-index: 999;
+  z-index: 9999;  /* ensure it’s on top */
+  pointer-events: auto;
 }
 
 #chatWidget {
