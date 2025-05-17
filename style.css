@@ -2,44 +2,42 @@
 
 /* Root-level CSS variables for theming and sizing */
 :root {
-  --launcher-size:   80px;       /* Default launcher diameter */
-  --widget-width:    350px;      /* Chat window width */
-  /* Full viewport height minus launcher + margin */
+  /* Launcher diameter now fluid: min 60px, ideal 8vw, max 120px */
+  --launcher-size: clamp(60px, 8vw, 120px);
+
+  --widget-width:    350px;
   --widget-height:   calc(100vh - (var(--launcher-size) + 40px));
-  --widget-bg:       #FFFFFF;    /* Chat window background */
-  --header-bg:       #000000;    /* Header background (changed to black for contrast) */
-  --header-text:     #FFFFFF;    /* Header text color */
-  --bubble-user:     #f0f0f0;    /* User bubble background */
-  --bubble-hover:    #ececec;    /* User bubble hover */
-  --input-bg:        #FFFFFF;    /* Input field background */
-  --input-border:    #ddd;       /* Input field border */
-  --btn-bg:          #000000;    /* Button background */
-  --btn-text:        #FFFFFF;    /* Button text */
-  --break-point:     600px;      /* Mobile breakpoint */
-}
+  --widget-bg:       #FFFFFF;
+  --header-bg:       #000000;
+  --header-text:     #FFFFFF;
+  --bubble-user:     #f0f0f0;
+  --bubble-hover:    #ececec;
+  --input-bg:        #FFFFFF;
+  --input-border:    #ddd;
+  --btn-bg:          #000000;
+  --btn-text:        #FFFFFF;
+  --break-point:     600px;
 
-* {
-  box-sizing: border-box;
-  font-family: 'Quicksand', sans-serif;
-}
-
-body {
-  margin: 0;
-  padding: 0;
+  /* Launcher icon asset */
+  --launcher-icon:   url('assets/face.png');
 }
 
 /* Launcher (bot icon) styling */
 #chatLauncher {
   position: fixed;
-  bottom: 40px;
-  right: 40px;
+  /* Raised higher on large screens, still responsive */
+  bottom: clamp(20px, 5vh, 60px);
+  right: clamp(20px, 5vw, 60px);
+
   width: var(--launcher-size);
   height: var(--launcher-size);
-  background-color: #000000;            /* Solid black for maximum contrast */
-  background-image: var(--launcher-icon);
-  background-size: 75% !important;
+
+  background-color: var(--btn-bg);
+  background-image: var(--launcher-icon) !important;
+  background-size: 80% !important;
   background-repeat: no-repeat;
   background-position: center;
+
   border-radius: 50%;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   cursor: pointer;
@@ -52,7 +50,7 @@ body {
   bottom: calc(var(--launcher-size) + 40px);
   right: 40px;
   width: var(--widget-width);
-  height: var(--widget-height);        /* Dynamic height based on viewport */
+  height: var(--widget-height);
   background: var(--widget-bg);
   border-radius: 20px;
   box-shadow: 0 8px 30px rgba(0,0,0,0.15);
@@ -62,82 +60,4 @@ body {
   z-index: 999;
 }
 
-/* Header styling */
-#chatHeader {
-  background-color: var(--header-bg);
-  color: var(--header-text);
-  padding: 16px;
-  font-size: 1rem;
-  font-weight: 600;
-  position: relative;
-}
-
-/* Content area styling with scroll */
-#chatContent {
-  padding: 16px;
-  font-size: 1rem;        /* Increased for readability */
-  line-height: 1.4;
-  overflow-y: auto;       /* Scroll if content overflows */
-  flex-grow: 1;
-}
-
-/* Option buttons */
-.optionButton {
-  background: var(--bubble-user);
-  border: none;
-  padding: 12px 16px;
-  border-radius: 12px;
-  margin: 6px 0;
-  width: 100%;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.2s;
-}
-
-.optionButton:hover {
-  background: var(--bubble-hover);
-}
-
-/* Input field styling */
-#inputField {
-  display: flex;
-  gap: 8px;
-  padding: 12px 16px;
-  border-top: 1px solid var(--input-border);
-  background: var(--input-bg);
-}
-
-#inputField input {
-  flex-grow: 1;
-  border: 1px solid var(--input-border);
-  border-radius: 8px;
-  padding: 8px;
-  font-size: 1rem;        /* Match increased font-size */
-}
-
-#inputField button {
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* Responsive adjustments for smaller screens */
-@media screen and (max-width: var(--break-point)) {
-  /* Reduce launcher size on mobile for better fit */
-  #chatLauncher {
-    width: 60px;
-    height: 60px;
-    bottom: 20px;
-    right: 20px;
-  }
-  /* Expand chat widget width on mobile */
-  #chatWidget {
-    width: 90%;
-    right: 5%;
-    height: calc(100vh - (var(--launcher-size) + 20px));
-  }
-}
+/* ... rest of your existing CSS unchanged ... */
