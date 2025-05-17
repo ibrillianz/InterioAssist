@@ -169,6 +169,16 @@ window.handleCTA = async label => {
 
 // --- 9) Finalize and close ---
 async function finalizeFlow() {
+  // 📝 Send responses to your Apps Script webhook
+  await fetch("https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbz3KixRrhicq9olsfA1H6fha2X7S1OopRjeTjrm1mImpkJnKurbHgvsXJ4WR2tF6f1M/exec/exec", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ...responses,
+      ctaChoice: responses.cta   // rename key if needed
+    })
+  });
+
   const reply = await handleMessage("decobot", JSON.stringify(responses), null);
   alert(reply);
   document.getElementById("chatWidget").style.display = "none";
