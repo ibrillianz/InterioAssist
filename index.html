@@ -14,13 +14,28 @@
 
   <!-- Chat Widget Container -->
   <div id="chatWidget">
-      <div id="chatHeader">
-    Design Assistant
-    <!-- Minimize button -->
-    <div id="minimizeBtn" onclick="toggleChat()" style="position:absolute; left:16px; top:16px; cursor:pointer; font-size:1.2rem; color:#FFFFFF;">–</div>
-    <!-- Close button -->
-    <div id="closeBtn"    onclick="toggleChat()" style="position:absolute; right:16px; top:16px; cursor:pointer; font-size:1.2rem; color:#FFFFFF;">×</div>
-  </div>
+    <!-- Branded Header -->
+    <div id="chatHeader" style="display:flex; align-items:center; justify-content:space-between;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <img src="assets/logo_small.png" alt="Tener Interiors"
+             style="width:24px; height:24px; border-radius:50%;" />
+        <span style="font-weight:600; font-size:1rem; color:var(--header-text);">
+          Tener Interiors
+        </span>
+      </div>
+      <div>
+        <span id="minimizeBtn" onclick="toggleChat()"
+              style="cursor:pointer; font-size:1.2rem; color:var(--header-text); margin-right:12px;">
+          –
+        </span>
+        <span id="closeBtn" onclick="toggleChat()"
+              style="cursor:pointer; font-size:1.2rem; color:var(--header-text);">
+          ×
+        </span>
+      </div>
+    </div>
+
+    <!-- Initial Chat Content -->
     <div id="chatContent">
       <p>Welcome to Tener Interiors 👋</p>
       <p>I’m your Design Assistant. How can I help you today?</p>
@@ -45,15 +60,16 @@
         💬 Other questions
       </button>
     </div>
-      <div id="inputField">
-    <input type="text" id="userInput" placeholder="Type your message..." />
-    <!-- Cancel button -->
-    <button onclick="toggleChat()" style="margin-right:8px;">Cancel</button>
-    <button onclick="submitInput()">Send</button>
-  </div>
+
+    <!-- Input Field -->
+    <div id="inputField">
+      <input type="text" id="userInput" placeholder="Type your message..." />
+      <button onclick="toggleChat()" style="margin-right:8px;">Cancel</button>
+      <button onclick="submitInput()">Send</button>
+    </div>
   </div>
 
-  <!-- Load our widget logic -->
+  <!-- Load widget logic -->
   <script type="module" src="main.js"></script>
 </body>
 </html>
