@@ -1,17 +1,8 @@
-# DecoBot – AI Interior Design Assistant 🤖
-
-A lightweight, embeddable chat widget to capture leads and book consultations.
-
+A lightweight, embeddable design assistant for interior consultation. No backend logic exposed.
 ---
 
 ## 🌐 Live Demo
 
-https://your-username.github.io/deco-bot/
+https://ibrillianz.github.io/deco-bot/
 
 ---
-
-## ⬇️ Embed Instructions
-
-1. Clone this repo:
-   ```bash
-   git clone https://github.com/ibrillianz/deco-bot.git
