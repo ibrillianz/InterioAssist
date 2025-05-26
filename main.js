@@ -17,6 +17,17 @@ window.toggleChat = () => {
   chatWidget.style.display = isOpen ? "none" : "flex";
 };
 
+// --- 2a) Bind the launcher to toggleChat ---
+window.addEventListener('DOMContentLoaded', () => {
+  const launcher = document.getElementById('chatLauncher');
+  if (launcher) {
+    launcher.addEventListener('click', window.toggleChat);
+  } else {
+    console.warn('⚠️ chatLauncher element not found');
+  }
+});
+
+
 // --- 3) Demo input (placeholder) ---
 window.submitInput = async () => {
   const inputEl = document.getElementById("userInput");
