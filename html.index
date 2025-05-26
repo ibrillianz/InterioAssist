@@ -13,7 +13,7 @@
   <div id="chatLauncher"></div>   <!-- inline onclick removed -->
 
   <!-- Chat Widget Container -->
-  <div id="chatWidget">
+  <div class="chat-widget" id="chatWidget">
     <!-- Branded Header -->
     <div id="chatHeader" style="display:flex; align-items:center; justify-content:space-between;">
       <div style="display:flex; align-items:center; gap:8px;">
