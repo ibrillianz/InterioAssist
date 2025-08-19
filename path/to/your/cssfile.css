@@ -1,0 +1,74 @@
+:root {
+  /* Launcher diameter now fluid: min 60px, ideal 8vw, max 120px */
+  --launcher-size: clamp(60px, 8vw, 120px);
+  --widget-max-width: 400px;
+  --widget-bg:       #FFFFFF;
+  --header-bg:       #000000;
+  --header-text:     #FFFFFF;
+  --bubble-user:     #f0f0f0;
+  --bubble-hover:    #ececec;
+  --input-bg:        #FFFFFF;
+  --input-border:    #ddd;
+  --btn-bg:          #000000;
+  --btn-text:        #FFFFFF;
+  --break-point:     600px;
+  --launcher-icon:   url('assets/face.png');
+  --widget-mobile-padding: 4vw;
+}
+
+#chatLauncher {
+  position: fixed;
+  bottom: clamp(20px, 5vh, 60px);
+  right: clamp(20px, 5vw, 60px);
+  width: var(--launcher-size);
+  height: var(--launcher-size);
+  background-color: var(--btn-bg);
+  background-image: var(--launcher-icon) !important;
+  background-size: 80% !important;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 999;
+}
+
+#chatWidget {
+  position: fixed;
+  bottom: calc(var(--launcher-size) + 20px);
+  right: 16px;
+  width: min(95vw, var(--widget-max-width));
+  max-width: 100vw;
+  height: min(85vh, 650px);
+  max-height: 100vh;
+  background: var(--widget-bg);
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 999;
+  transition: width 0.2s, height 0.2s;
+}
+
+@media (max-width: 600px) {
+  #chatWidget {
+    left: var(--widget-mobile-padding);
+    right: var(--widget-mobile-padding);
+    width: calc(100vw - 2 * var(--widget-mobile-padding));
+    height: 94vh;
+    bottom: var(--widget-mobile-padding);
+    border-radius: 12px;
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+}
+
+@media (max-width: 400px) {
+  #chatWidget {
+    width: 98vw;
+    left: 1vw;
+    right: 1vw;
+    border-radius: 6px;
+  }
+}
