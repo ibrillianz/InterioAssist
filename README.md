@@ -1,8 +1,11 @@
-A lightweight, embeddable design assistant for interior consultation. No backend logic exposed.
----
+Interior Design Assistant Widget
+A lightweight, mobile-optimized chat widget for interior design consultation and lead generation.
+🌐 Live Demo
+https://tenerinteriors.com/
+✨ Features
 
-## 🌐 Live Demo
-
-https://ibrillianz.github.io/deco-bot/
-
----
+Mobile-first responsive design - Works perfectly on all devices
+Lead qualification flow - Residential & Commercial projects
+Cost estimation - Automated pricing based on project details
+Custom branding - Easy logo, color, and content customization
+No backend required - Pure frontend widget
