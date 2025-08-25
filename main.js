@@ -765,13 +765,13 @@ async function submitLead() {
     // Show loading state
     addBotMessage('Submitting your request...');
 
-    const response = await fetch('https://script.google.com/macros/s/AKfycbzl9ZkLGKIIDYuCt0cQa77NWvrLyWyT_fH3pwL3WDCc09pFOVwa55cV1blU0kJBbtqx/exec', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(leadData)
-    });
+    const response = await fetch('http://localhost:5000/api/submit-lead', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(leadData)
+});
 
     if (response.ok) {
       showSuccessMessage();
