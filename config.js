@@ -117,4 +117,13 @@ export const VALIDATION_CONFIG = {
     dangerousChars: /<script|javascript:|on\w+=/gi
   }
 };
+// ========== Bot Engine Configuration ==========
+export const BOT_ENGINE_CONFIG = {
+  apiBaseUrl: 'http://localhost:3000',
+  apiKey: 'demo-key',
+  clientId: 'interioassist',
+  timeout: 5000,
+  retries: 2,
+  fallbackEnabled: true
+};
 
