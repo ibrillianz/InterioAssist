@@ -41,6 +41,24 @@ export const BOT_ENGINE_CONFIG = {
   apiKey: process.env.BOT_ENGINE_API_KEY || "demo-key"
 };
 
+// ========== Avatar Management System ==========
+export const AVATAR_CONFIG = {
+  // Default fallback avatars (emojis work everywhere)
+  fallbacks: {
+    kavya: "👩‍🎨",
+    arjun: "👨‍💼", 
+    priya: "👩‍🔧",
+    rohan: "👨‍💻",
+    default: "🤖"
+  },
+  
+  // Avatar loading settings
+  lazyLoad: true,
+  errorFallback: true,
+  imageFormats: ['webp', 'jpg', 'png', 'svg'],
+  maxSize: '200kb'
+};
+
 // ========== Enhanced Validation Configuration ==========
 export const VALIDATION_CONFIG = {
   // Phone number patterns for different countries
@@ -159,13 +177,13 @@ export const VALIDATION_CONFIG = {
   ]
 };
 
-// ========== Bot Personalities ==========
+// ========== Bot Personalities (AVATAR KEYS ONLY) ==========
 export const BOT_PERSONALITIES = [
   {
     key: "kavya",
     name: "Kavya",
     tagline: "Premium Residential Expert",
-    avatar: "👩‍🎨",
+    avatar: "kavya",  // ✅ Just the key, not hardcoded emoji
     priceMultiplier: 1.4,
     projectType: "residential",
     greeting: "Namaste! I'm Kavya, your premium residential design specialist.",
@@ -175,7 +193,7 @@ export const BOT_PERSONALITIES = [
     key: "arjun",
     name: "Arjun",
     tagline: "Mid-Range Residential Expert",
-    avatar: "👨‍💼",
+    avatar: "arjun",  // ✅ Key reference only
     priceMultiplier: 1.0,
     projectType: "residential",
     greeting: "Hi! I'm Arjun, and I specialize in functional, beautiful homes.",
@@ -185,7 +203,7 @@ export const BOT_PERSONALITIES = [
     key: "priya",
     name: "Priya",
     tagline: "Budget Residential Expert",
-    avatar: "👩‍🔧",
+    avatar: "priya",  // ✅ Key reference only
     priceMultiplier: 0.7,
     projectType: "residential",
     greeting: "Hello! I'm Priya, your budget-friendly design expert.",
@@ -195,7 +213,7 @@ export const BOT_PERSONALITIES = [
     key: "rohan",
     name: "Rohan",
     tagline: "Commercial Space Expert",
-    avatar: "👨‍💻",
+    avatar: "rohan",  // ✅ Key reference only
     priceMultiplier: 1.2,
     projectType: "commercial",
     greeting: "Namaste! I'm Rohan, your commercial design specialist.",
