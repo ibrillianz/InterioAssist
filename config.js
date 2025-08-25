@@ -126,4 +126,18 @@ export const BOT_ENGINE_CONFIG = {
   retries: 2,
   fallbackEnabled: true
 };
+// ========== Conversation Flows ==========
+export const RESIDENTIAL_FLOW = [
+  { key: 'projectType', prompt: 'What type of project?', type: 'options', options: ['Full Home', 'Kitchen', 'Bedroom', 'Living Room'] },
+  { key: 'userName', prompt: 'What\'s your name?', type: 'input' },
+  { key: 'userPhone', prompt: 'Your phone number?', type: 'input' },
+  { key: 'userEmail', prompt: 'Your email address?', type: 'input' }
+];
+
+export const COMMERCIAL_FLOW = [
+  { key: 'projectType', prompt: 'What type of commercial space?', type: 'options', options: ['Office', 'Retail', 'Restaurant', 'Hotel'] },
+  { key: 'userName', prompt: 'What\'s your name?', type: 'input' },
+  { key: 'userPhone', prompt: 'Your phone number?', type: 'input' },
+  { key: 'userEmail', prompt: 'Your email address?', type: 'input' }
+];
 
