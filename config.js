@@ -8,7 +8,7 @@ export const BOT_PERSONALITIES = [
     name: 'KAVYA',
     tagline: 'Premium Residential Expert',
     serviceDescription: '20L+ Luxury materials, custom designs',
-    greeting: 'Namaste! I\'m Kavya, your premium residential design specialist. I create luxury homes with imported materials, custom furniture, and high-end finishes. Let\'s design your dream space!',
+    greeting: 'Namaste! I am Kavya, your premium residential design specialist. I create luxury homes with imported materials, custom furniture, and high-end finishes. Let\'s design your dream space!',
     priceMultiplier: 1.4,
     projectType: 'residential'
   },
@@ -18,7 +18,7 @@ export const BOT_PERSONALITIES = [
     name: 'ARJUN', 
     tagline: 'Mid-Range Residential Expert',
     serviceDescription: '8-20L Quality materials, smart design',
-    greeting: 'Hi! I\'m Arjun, and I specialize in beautiful, functional homes within smart budgets. Quality materials, modular solutions, and great design - let\'s create your perfect home!',
+    greeting: 'Hi! I am Arjun, and I specialize in beautiful, functional homes within smart budgets. Quality materials, modular solutions, and great design - let\'s create your perfect home!',
     priceMultiplier: 1.0,
     projectType: 'residential'
   },
@@ -28,7 +28,7 @@ export const BOT_PERSONALITIES = [
     name: 'PRIYA',
     tagline: 'Budget Residential Expert', 
     serviceDescription: '3-8L Cost-effective, functional',
-    greeting: 'Hello! I\'m Priya, your budget-friendly design expert. I create beautiful homes that are cost-effective and functional. Great design doesn\'t need to be expensive!',
+    greeting: 'Hello! I am Priya, your budget-friendly design expert. I create beautiful homes that are cost-effective and functional. Great design doesn\'t need to be expensive!',
     priceMultiplier: 0.7,
     projectType: 'residential'
   },
@@ -38,7 +38,7 @@ export const BOT_PERSONALITIES = [
     name: 'ROHAN',
     tagline: 'Commercial Space Expert',
     serviceDescription: 'Offices, retail, restaurants', 
-    greeting: 'Namaste! I\'m Rohan, your commercial design specialist. I create productive office spaces, retail stores, and restaurants that enhance your business success!',
+    greeting: 'Namaste! I am Rohan, your commercial design specialist. I create productive office spaces, retail stores, and restaurants that enhance your business success!',
     priceMultiplier: 1.2,
     projectType: 'commercial'
   }
@@ -117,27 +117,55 @@ export const VALIDATION_CONFIG = {
     dangerousChars: /<script|javascript:|on\w+=/gi
   }
 };
-// ========== Bot Engine Configuration ==========
-export const BOT_ENGINE_CONFIG = {
-  apiBaseUrl: 'http://localhost:3000',
-  apiKey: 'demo-key',
-  clientId: 'interioassist',
-  timeout: 5000,
-  retries: 2,
-  fallbackEnabled: true
-};
+
 // ========== Conversation Flows ==========
 export const RESIDENTIAL_FLOW = [
   { key: 'projectType', prompt: 'What type of project?', type: 'options', options: ['Full Home', 'Kitchen', 'Bedroom', 'Living Room'] },
-  { key: 'userName', prompt: 'What\'s your name?', type: 'input' },
+  { key: 'userName', prompt: 'What's your name?', type: 'input' },
   { key: 'userPhone', prompt: 'Your phone number?', type: 'input' },
   { key: 'userEmail', prompt: 'Your email address?', type: 'input' }
 ];
 
 export const COMMERCIAL_FLOW = [
   { key: 'projectType', prompt: 'What type of commercial space?', type: 'options', options: ['Office', 'Retail', 'Restaurant', 'Hotel'] },
-  { key: 'userName', prompt: 'What\'s your name?', type: 'input' },
+  { key: 'userName', prompt: 'What's your name?', type: 'input' },
   { key: 'userPhone', prompt: 'Your phone number?', type: 'input' },
   { key: 'userEmail', prompt: 'Your email address?', type: 'input' }
 ];
 
+// ========== Material Questions ==========
+export const RES_MATERIAL_QUESTIONS = {
+  'Full Home': [
+    { key: 'flooring', prompt: 'What flooring do you prefer?', type: 'options', options: ['Marble', 'Wood', 'Tiles'] },
+    { key: 'kitchen', prompt: 'Kitchen style preference?', type: 'options', options: ['Modern', 'Traditional', 'Contemporary'] }
+  ],
+  'Kitchen': [
+    { key: 'cabinets', prompt: 'Cabinet material?', type: 'options', options: ['Wood', 'Laminate', 'Acrylic'] }
+  ]
+};
+
+export const COMM_MATERIAL_QUESTIONS = {
+  'Office': [
+    { key: 'flooring', prompt: 'Office flooring preference?', type: 'options', options: ['Carpet', 'Vinyl', 'Tiles'] },
+    { key: 'furniture', prompt: 'Furniture style?', type: 'options', options: ['Executive', 'Modern', 'Ergonomic'] }
+  ],
+  'Retail': [
+    { key: 'lighting', prompt: 'Lighting preference?', type: 'options', options: ['LED', 'Track', 'Accent'] }
+  ]
+};
+
+// ========== Bot Engine Configuration ==========
+export const BOT_ENGINE_CONFIG = {
+  apiBaseUrl: '/api',
+  clientId: 'interioassist',
+  timeout: 5000,
+  retries: 2,
+  fallbackEnabled: true
+};
+
+// ========== Lead Capture Configuration ==========
+export const LEAD_CAPTURE_CONFIG = {
+  apiEndpoint: '/api/submit-lead',
+  clientId: 'tener-interiors',
+  enabled: true
+};
