@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tener Interiors - Get Your Design Quote</title>
+    
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Load InterioAssist Styles from parent directory -->
+    <link rel="stylesheet" href="../../styles.css">
+    
+    <!-- Tener-specific styling overrides -->
+    <style>
+        :root {
+            --client-primary-color: #C5A880;
+            --client-secondary-color: #b8995a;
+        }
+        
+        .demo-container {
+            background: linear-gradient(135deg, #f8f6f0 0%, #ede7d8 100%);
+            min-height: 100vh;
+        }
+        
+        .demo-header h1 {
+            color: var(--client-primary-color);
+        }
+        
+        .feature-card {
+            border-left: 4px solid var(--client-primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Tener Interiors Landing Page -->
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>Tener Interiors</h1>
+            <p>Transform your space with Hyderabad's premier interior design experts. Get personalized quotes in minutes through our AI-powered design assistant.</p>
+        </div>
+
+        <div class="demo-cta">
+            <h2>Get Your Personalized Design Quote</h2>
+            <p style="margin-bottom: 30px;">Chat with our AI design assistant to get an instant estimate tailored to your space and budget</p>
+            <a href="#" class="demo-btn" onclick="document.querySelector('.chat-launcher').click(); return false;">Start Design Consultation</a>
+        </div>
+    </div>
+
+    <!-- InterioAssist Chat Widget -->
+    <button class="chat-launcher" id="chat-launcher">
+        <span>💬</span>
+    </button>
+
+    <div class="chat-widget" id="chat-widget">
+        <div class="chat-header">
+            <button class="close-btn" onclick="toggleChat()">×</button>
+            <div class="bot-info">
+                <div class="bot-avatar-small">🎨</div>
+                <div>
+                    <div class="bot-name-header">Tener Design Assistant</div>
+                    <div class="bot-tagline-header">Choose Your Expert</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chat-messages">
+            <!-- Messages populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- CRITICAL: Load Tener Configuration BEFORE InterioAssist Core -->
+    <script type="module">
+        import { 
+            CLIENT_AVATAR_CONFIG, 
+            CLIENT_BRANDING_CONFIG, 
+            CLIENT_BOT_OVERRIDES 
+        } from './client-config.js';
+        
+        // Make configuration available globally for InterioAssist
+        window.CLIENT_AVATAR_CONFIG = CLIENT_AVATAR_CONFIG;
+        window.CLIENT_BRANDING_CONFIG = CLIENT_BRANDING_CONFIG; 
+        window.CLIENT_BOT_OVERRIDES = CLIENT_BOT_OVERRIDES;
+        
+        console.log('Tener Interiors configuration loaded successfully');
+    </script>
+
+    <!-- Load InterioAssist Core AFTER client config is ready -->
+    <script type="module" src="../../main.js"></script>
+</body>
+</html>
